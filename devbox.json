@@ -37,6 +37,7 @@
   },
   "shell": {
     "init_hook": [
+      "export HELM_PLUGINS=\"$DEVBOX_PACKAGES_DIR\"",
       "export PATH=\"$DEVBOX_PROJECT_ROOT/.devbox/crdoc/$CRDOC_VERSION/bin:$PATH\"",
       "test -x \"$DEVBOX_PROJECT_ROOT/.devbox/crdoc/$CRDOC_VERSION/bin/crdoc\" || GOBIN=\"$DEVBOX_PROJECT_ROOT/.devbox/crdoc/$CRDOC_VERSION/bin\" go install \"fybrik.io/crdoc@$CRDOC_VERSION\""
     ]
