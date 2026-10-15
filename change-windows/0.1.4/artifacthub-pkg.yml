@@ -1,0 +1,19 @@
+name: change-windows
+displayName: Change Windows
+description: Calendar, scheduled Kubernetes actions, and active maintenance
+  windows for Headlamp.
+version: 0.1.4
+license: Apache-2.0
+homeURL: "https://change-windows.addons.projectcapsule.dev"
+logoURL: 'https://raw.githubusercontent.com/projectcapsule/capsule/581a8fe60e5a8a4c2861c32dd9854e1c2461777f/assets/logo/capsule.svg'
+links:
+  - name: Documentation
+    url: https://change-windows.addons.projectcapsule.dev
+  - name: Source
+    url: https://github.com/projectcapsule/change-windows
+annotations:
+  headlamp/plugin/version-compat: '>=0.45.0'
+  headlamp/plugin/distro-compat: 'in-cluster,web'
+  headlamp/plugin/archive-url: https://github.com/projectcapsule/change-windows/releases/download/v0.1.4/change-windows-0.1.4.tar.gz
+  headlamp/plugin/archive-checksum: sha256:23d9d4fc1caf5011502941afa0e97079bbe0e2c44d448320bff9b048b77c61e8
+createdAt: 2026-10-15T10:01:12.864Z
