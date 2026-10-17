@@ -8,7 +8,6 @@ concurrency:
   # All tags update the same Artifact Hub branch.
   group: release-publication
   cancel-in-progress: false
-  queue: max
 jobs:
   release:
     runs-on: ubuntu-24.04
