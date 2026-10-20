@@ -4,7 +4,7 @@ go 1.27.1
 
 require (
 	github.com/go-openapi/jsonpointer v0.23.1
-	github.com/google/cel-go v0.31.0
+	github.com/google/cel-go v0.32.0
 	github.com/projectcapsule/capsule v0.14.6
 	github.com/prometheus/client_golang v1.24.1
 	github.com/robfig/cron/v3 v3.0.1
