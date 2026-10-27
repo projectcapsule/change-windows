@@ -191,7 +191,7 @@ func TestChangeWindowExamples(t *testing.T) {
 	if err != nil || len(files) == 0 {
 		t.Fatalf("no examples found: %v", err)
 	}
-	files = append(files, "../../playground/manifests/demo/window.yaml")
+	files = append(files, "../../playground/manifests/demo/windows/after-hours.yaml")
 	for _, file := range files {
 		t.Run(filepath.Base(file), func(t *testing.T) {
 			data, err := os.ReadFile(file)
