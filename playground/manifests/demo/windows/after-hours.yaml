@@ -1,29 +1,31 @@
 apiVersion: addons.projectcapsule.dev/v1alpha1
 kind: ChangeWindow
 metadata:
-  name: playground
+  name: after-hours
+  labels:
+    company.com/consumer: "tenants"
 spec:
   namespaceSelectors:
     - matchLabels:
         environment: development
   schedules:
-    - name: nights
-      cron: "*/10 * * * *"
-      timeZone: UTC
-      duration: 2m
-  targets:
-    - name: apps
-      apiVersion: apps/v1
-      kind: Deployment
-      selector:
-        matchLabels:
-          downscaling: enabled
+    - name: every-night
+      cron: "0 19 * * *"
+      timeZone: Europe/Zurich
+      duration: 12h
   serviceAccount:
     namespace: schedule-action-controller-system
-    name: playground-executor
+    name: after-hours-executor
+  targets:
+    - name: deployments
+      apiVersion: apps/v1
+      kind: Deployment
+    - name: statefulsets
+      apiVersion: apps/v1
+      kind: StatefulSet
   actions:
-    - name: downscale
-      targets: [apps]
+    - name: sleep-and-resume
+      targets: [deployments, statefulsets]
       capture:
         replicas:
           subresource: scale
@@ -38,57 +40,37 @@ spec:
       onEnd:
         apply:
           subresource: scale
-          template: |
+          template: |-
             spec:
               replicas: {{ .captured.replicas }}
-  admission:
-    - name: freeze-scaling
-      targets: [apps]
-      operations: [UPDATE]
-      subresources: ["", scale]
-      when: Active
-      matchConditions:
-        - name: replicas-changed
-          expression: "object.spec.replicas != oldObject.spec.replicas"
-      message: "Replica changes are frozen during maintenance."
-  config:
-    admission:
-      warnings:
-        - name: upcoming
-          targets: [apps]
-          operations: [CREATE, UPDATE, DELETE]
-          subresources: ["", scale]
-          when: BeforeStart
-          within: 1m
-          message: "Maintenance starts at {{ .window.start }}."
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: playground-executor
+  name: after-hours-executor
   namespace: schedule-action-controller-system
 automountServiceAccountToken: false
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: impersonate-playground-executor
+  name: impersonate-after-hours-executor
   namespace: schedule-action-controller-system
 rules:
   - apiGroups: [""]
     resources: [serviceaccounts]
-    resourceNames: [playground-executor]
+    resourceNames: [after-hours-executor]
     verbs: [impersonate]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: impersonate-playground-executor
+  name: impersonate-after-hours-executor
   namespace: schedule-action-controller-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: impersonate-playground-executor
+  name: impersonate-after-hours-executor
 subjects:
   - kind: ServiceAccount
     name: schedule-action-controller-controller-manager
@@ -97,26 +79,26 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: playground-scale
+  name: after-hours-scale
   namespace: development
 rules:
   - apiGroups: [apps]
-    resources: [deployments]
+    resources: [deployments, statefulsets]
     verbs: [get, list]
   - apiGroups: [apps]
-    resources: [deployments/scale]
+    resources: [deployments/scale, statefulsets/scale]
     verbs: [get, patch]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: playground-scale
+  name: after-hours-scale
   namespace: development
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: playground-scale
+  name: after-hours-scale
 subjects:
   - kind: ServiceAccount
-    name: playground-executor
+    name: after-hours-executor
     namespace: schedule-action-controller-system
