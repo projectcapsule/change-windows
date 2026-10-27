@@ -675,8 +675,10 @@ tasks:
         export IMG=change-windows:playground
         export IMAGE_ARCHIVE="$temp/controller.tar"
         task dev:deploy
+        # Local bootstrap resources are separate from the shared demo Kustomization.
+        kubectl apply -f playground/manifests/dev/resources.yaml
         kubectl apply -k playground/manifests
-        kubectl wait changewindow/playground --for=condition=Ready --timeout=120s
+        kubectl wait changewindow --all --for=condition=Ready --timeout=120s
         flux install --components=source-controller,helm-controller --watch-all-namespaces=false --timeout=180s
         kubectl apply -k playground/installation/headlamp
         kubectl -n flux-system wait helmrelease/headlamp --for=condition=Ready --timeout=300s
