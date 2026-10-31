@@ -4,7 +4,7 @@
   "description": "Calendar, ChangeWindow overview, and active maintenance windows for Headlamp.",
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=24 <25",
+    "node": ">=24 <27",
     "npm": ">=11"
   },
   "scripts": {
