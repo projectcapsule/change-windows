@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@js-temporal/polyfill": "0.5.1",
-    "cron-parser": "5.10.2"
+    "cron-parser": "5.10.4"
   },
   "headlamp": {
     "extraDist": {
