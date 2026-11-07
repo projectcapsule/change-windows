@@ -3,7 +3,7 @@ module github.com/projectcapsule/schedule-action-controller
 go 1.27.1
 
 require (
-	github.com/go-openapi/jsonpointer v0.23.1
+	github.com/go-openapi/jsonpointer v0.24.0
 	github.com/google/cel-go v0.31.0
 	github.com/projectcapsule/capsule v0.14.6
 	github.com/prometheus/client_golang v1.24.1
